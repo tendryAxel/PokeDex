@@ -17,6 +17,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { FC, useContext, useState } from "react"
 import { MainContext } from "@/services/MainProvider"
 import { Pokemon } from "pokeapi-js-wrapper"
+import { Link, useRouter } from "expo-router"
 
 const welcomeFace = require("../../assets/images/welcome-face.png")
 
@@ -54,6 +55,7 @@ export default function WelcomeScreen() {
 
 const PokemonAsListItem: FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
   const { theme, themed } = useAppTheme()
+  const router = useRouter()
 
   return (
     <View style={themed($pokemonAsListItem)}>
@@ -66,6 +68,10 @@ const PokemonAsListItem: FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
         tintColor={theme.isDark ? theme.colors.palette.neutral900 : undefined}
       />
       <Text text={pokemon.name} />
+      <Link
+        href={`/${pokemon.name}`}
+        style={{ width: "100%", height: "100%", position: "absolute" }}
+      />
     </View>
   )
 }
@@ -73,6 +79,7 @@ const PokemonAsListItem: FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
 const $ListContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
   backgroundColor: colors.background,
   alignItems: "center",
+  width: "100%",
 })
 
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
@@ -95,6 +102,7 @@ const $pokemonAsListItem: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   borderColor: colors.palette.neutral900,
   borderRadius: spacing.md,
   borderWidth: 1,
+  position: "relative",
 })
 
 const $searchInput: ThemedStyle<TextStyle> = ({ colors }) => ({
