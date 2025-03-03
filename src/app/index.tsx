@@ -1,16 +1,31 @@
-import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import {
+  FlatList,
+  Image,
+  ImageStyle,
+  ListRenderItem,
+  ListRenderItemInfo,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import { Screen, Text } from "@/components"
 import { isRTL } from "@/i18n"
 import { ThemedStyle } from "@/theme"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { FC, useContext } from "react"
+import { MainContext } from "@/services/MainProvider"
+import { Pokemon } from "pokeapi-js-wrapper"
 
 const welcomeLogo = require("../../assets/images/logo.png")
 const welcomeFace = require("../../assets/images/welcome-face.png")
 
 export default function WelcomeScreen() {
-  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
   const { theme, themed } = useAppTheme()
+
+  const {
+    pokemons
+  } = useContext(MainContext)
 
   return (
     <Screen safeAreaEdges={["top"]} contentContainerStyle={themed($container)}>
@@ -30,13 +45,35 @@ export default function WelcomeScreen() {
           tintColor={theme.isDark ? theme.colors.palette.neutral900 : undefined}
         />
       </View>
-
-      <View style={[themed($bottomContainer), $bottomContainerInsets]}>
-        <Text tx="welcomeScreen:postscript" size="md" />
+      <View style={themed($ListContainer)}>
+        <FlatList data={pokemons} renderItem={i => <PokemonAsListItem pokemon={i.item} />} />
       </View>
     </Screen>
   )
 }
+
+const PokemonAsListItem: FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
+  const { theme } = useAppTheme()
+
+  return (
+    <View>
+      <Image
+        source={{
+          uri: pokemon.sprites.other.showdown.front_default || welcomeFace,
+          height: 100
+        }}
+        height={100}
+        tintColor={theme.isDark ? theme.colors.palette.neutral900 : undefined}
+      />
+      <Text>{pokemon.name}</Text>
+    </View>
+  )
+}
+
+const $ListContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  flex: 1,
+  backgroundColor: colors.background,
+})
 
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
   flex: 1,
@@ -49,17 +86,6 @@ const $topContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   flexBasis: "57%",
   justifyContent: "center",
   paddingHorizontal: spacing.lg,
-})
-
-const $bottomContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  flexShrink: 1,
-  flexGrow: 0,
-  flexBasis: "43%",
-  backgroundColor: colors.palette.neutral100,
-  borderTopLeftRadius: 16,
-  borderTopRightRadius: 16,
-  paddingHorizontal: spacing.lg,
-  justifyContent: "space-around",
 })
 
 const $welcomeLogo: ThemedStyle<ImageStyle> = ({ spacing }) => ({

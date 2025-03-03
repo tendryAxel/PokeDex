@@ -7,6 +7,7 @@ import { customFontsToLoad } from "@/theme"
 import { initI18n } from "@/i18n"
 import { loadDateFnsLocale } from "@/utils/formatDate"
 import { useThemeProvider } from "@/utils/useAppTheme"
+import { MainProvider } from "@/services/MainProvider"
 
 SplashScreen.preventAutoHideAsync()
 
@@ -49,7 +50,9 @@ export default function Root() {
   return (
     <ThemeProvider value={{ themeScheme, setThemeContextOverride }}>
       <KeyboardProvider>
-        <Slot />
+        <MainProvider>
+          <Slot />
+        </MainProvider>
       </KeyboardProvider>
     </ThemeProvider>
   )
