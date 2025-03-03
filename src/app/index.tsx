@@ -24,7 +24,7 @@ export default function WelcomeScreen() {
   const { themed } = useAppTheme()
   const [nameToSearch, setNameToSearch] = useState<string>("")
 
-  const { pokemons } = useContext(MainContext)
+  const { pokemons, nextPokemons } = useContext(MainContext)
 
   return (
     <Screen safeAreaEdges={["top"]} contentContainerStyle={themed($container)}>
@@ -44,6 +44,7 @@ export default function WelcomeScreen() {
             p.name.trim().toLowerCase().includes(nameToSearch) ||
             nameToSearch.trim().toLowerCase().includes(p.name),
         )}
+        onEndReached={nextPokemons}
         numColumns={2}
         renderItem={(i) => <PokemonAsListItem pokemon={i.item} />}
       />

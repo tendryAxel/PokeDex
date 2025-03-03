@@ -5,6 +5,7 @@ import { NamedAPIResourceList, Pokemon } from "pokeapi-js-wrapper"
 
 export type MainContextType = {
   pokemons: Pokemon[]
+  nextPokemons: () => void
 }
 
 export const MainContext = createContext<MainContextType>({} as MainContextType)
@@ -12,6 +13,10 @@ export const MainContext = createContext<MainContextType>({} as MainContextType)
 export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
   const [pokemons, modifyPokemons] = useList<Pokemon>()
   const [pokedexStat, setPokedexStat] = useState<NamedAPIResourceList>()
+
+  const nextPokemons = () => {
+    pokedex.getPokemonsList({ limit: 20, offset: pokemons.length }).then(setPokedexStat)
+  }
 
   useEffect(() => {
     pokedex.getPokemonsList({ limit: 20, offset: 0 }).then(setPokedexStat)
@@ -31,6 +36,7 @@ export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
     <MainContext.Provider
       value={{
         pokemons,
+        nextPokemons,
       }}
     >
       {children}
