@@ -37,41 +37,41 @@ export default function WelcomeScreen() {
           style={themed($searchInput)}
         />
       </View>
-      <View style={themed($ListContainer)}>
-        <FlatList
-          data={pokemons.filter(
-            (p) =>
-              p.name.trim().toLowerCase().includes(nameToSearch) ||
-              nameToSearch.trim().toLowerCase().includes(p.name),
-          )}
-          renderItem={(i) => <PokemonAsListItem pokemon={i.item} />}
-        />
-      </View>
+      <FlatList
+        contentContainerStyle={themed($ListContainer)}
+        data={pokemons.filter(
+          (p) =>
+            p.name.trim().toLowerCase().includes(nameToSearch) ||
+            nameToSearch.trim().toLowerCase().includes(p.name),
+        )}
+        numColumns={2}
+        renderItem={(i) => <PokemonAsListItem pokemon={i.item} />}
+      />
     </Screen>
   )
 }
 
 const PokemonAsListItem: FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
-  const { theme } = useAppTheme()
+  const { theme, themed } = useAppTheme()
 
   return (
-    <View>
+    <View style={themed($pokemonAsListItem)}>
       <Image
         source={{
           uri: pokemon.sprites.other.showdown.front_default || welcomeFace,
-          height: 100,
+          height: 150,
+          width: 140,
         }}
-        height={100}
         tintColor={theme.isDark ? theme.colors.palette.neutral900 : undefined}
       />
-      <Text>{pokemon.name}</Text>
+      <Text text={pokemon.name} />
     </View>
   )
 }
 
 const $ListContainer: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  flex: 1,
   backgroundColor: colors.background,
+  alignItems: "center",
 })
 
 const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
@@ -84,6 +84,16 @@ const $topContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   height: 100,
   justifyContent: "center",
   paddingHorizontal: spacing.lg,
+})
+
+const $pokemonAsListItem: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+  height: 200,
+  justifyContent: "center",
+  margin: spacing.md,
+  padding: spacing.md,
+  borderColor: colors.palette.neutral900,
+  borderRadius: spacing.md,
+  borderWidth: 1,
 })
 
 const $searchInput: ThemedStyle<TextStyle> = ({ colors }) => ({
