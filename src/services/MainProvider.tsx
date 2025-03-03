@@ -27,7 +27,13 @@ export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [pokedexStat])
 
-  return <MainContext.Provider value={{
-    pokemons
-  }}>{children}</MainContext.Provider>
+  return (
+    <MainContext.Provider
+      value={{
+        pokemons,
+      }}
+    >
+      {children}
+    </MainContext.Provider>
+  )
 }

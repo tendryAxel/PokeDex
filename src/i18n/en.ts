@@ -23,6 +23,9 @@ const en = {
       button: "Let's try this again",
     },
   },
+  search: {
+    placeholder: "Search",
+  },
 }
 
 export default en
