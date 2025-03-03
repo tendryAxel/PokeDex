@@ -26,6 +26,9 @@ const en = {
   search: {
     placeholder: "Search",
   },
+  pokemon: {
+    stat: "Stat",
+  },
 }
 
 export default en
