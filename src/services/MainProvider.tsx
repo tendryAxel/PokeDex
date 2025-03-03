@@ -6,6 +6,7 @@ import { NamedAPIResourceList, Pokemon } from "pokeapi-js-wrapper"
 export type MainContextType = {
   pokemons: Pokemon[]
   nextPokemons: () => void
+  pokemonInfoByName: (name: string) => Pokemon
 }
 
 export const MainContext = createContext<MainContextType>({} as MainContextType)
@@ -16,6 +17,10 @@ export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const nextPokemons = () => {
     pokedex.getPokemonsList({ limit: 20, offset: pokemons.length }).then(setPokedexStat)
+  }
+
+  const pokemonInfoByName = (name: string) => {
+    return pokemons.filter((p) => p.name === name)[0]
   }
 
   useEffect(() => {
@@ -37,6 +42,7 @@ export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
       value={{
         pokemons,
         nextPokemons,
+        pokemonInfoByName,
       }}
     >
       {children}
